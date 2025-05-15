@@ -71,7 +71,7 @@ public final class GameImpl implements Game {
         for (final var zombie: zombies) {
             if (zombie.getPosition().getX() <= HOUSE_X_POSITION) {
                 gameState.setWinState(false);
-                return false;
+                return true;
             }
         }
         return false;
@@ -200,7 +200,7 @@ public final class GameImpl implements Game {
                         || plant.getPosition().getY() == zombie.getPosition().getY() + DELTA_Y_PLANT - 3)
                         .forEach(zombie -> {
                             bullets.add(new BulletImpl(
-                                    new Pair<>(plant.getPosition().getX() + DELTA_X_BULLET, plant.getPosition().getX()),
+                                    new Pair<>(plant.getPosition().getX() + DELTA_X_BULLET, plant.getPosition().getY()),
                                     BULLET_SPEED,
                                     plant.getDamage(),
                                     "Bullet"));

@@ -29,6 +29,11 @@ public class FieldCellListener implements MouseListener {
         hoverHandler(false);
     }
 
+    @Override
+    public void mouseExited(MouseEvent e) {
+        hoverHandler(false);
+    }
+
     private void hoverHandler(final boolean hover) {
         if (this.parent.hasPlant()) {
             return;

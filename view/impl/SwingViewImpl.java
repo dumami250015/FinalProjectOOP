@@ -6,8 +6,11 @@ import controller.api.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.util.Optional;
 
 public final class SwingViewImpl implements View {
     public static final int APPLICATION_WIDTH = 1000;
@@ -51,6 +54,67 @@ public final class SwingViewImpl implements View {
         this.frame.setIconImage(new ImageIcon(ClassLoader.getSystemResource(GAME_ICON)).getImage());
 
         final MenuPanel menuPanel = new MenuPanel(this, MENU_BACKGROUND);
+        final LevelPanel levelPanel = new LevelPanel(this, LEVEL_BACKGROUND);
+        this.gamePanel = new GamePanel(this, GAME_BACKGROUND);
 
+        this.panel = new JPanel(sceneManager);
+        this.panel.setSize(APPLICATION_WIDTH, APPLICATION_HEIGHT);
+        this.panel.add(menuPanel, MENU_PANEL_CONSTRAINT);
+        this.panel.add(levelPanel, LEVEL_PANEL_CONSTRAINT);
+        this.panel.add(gamePanel, GAME_PANEL_CONSTRAINT);
+        this.panel.addComponentListener(new ComponentListener() {
+            @Override
+            public void componentResized(final ComponentEvent e) {
+                scale = new Pair<>(e.getComponent().getWidth() / (double) APPLICATION_WIDTH,
+                        e.getComponent().getHeight() / (double) APPLICATION_HEIGHT);
+            }
+
+            @Override
+            public void componentMoved(ComponentEvent e) {}
+
+            @Override
+            public void componentShown(ComponentEvent e) {}
+
+            @Override
+            public void componentHidden(ComponentEvent e) {}
+        });
+        frame.getContentPane().add(panel);
+
+        frame.setVisible(true);
+    }
+
+    @Override
+    public MyController getController() {
+        return this.controller;
+    }
+
+    @Override
+    public void setScene(final String scene) {
+        this.sceneManager.show(this.panel, scene);
+        this.currentConstraint = scene;
+    }
+
+    @Override
+    public String getSceneConstraint() {
+        return this.currentConstraint;
+    }
+
+    @Override
+    public void update() {
+        this.panel.repaint();
+    }
+
+    @Override
+    public void endGame(final Optional<Boolean> win) {
+        if (win.isEmpty()) {
+            throw new IllegalAccessError("Function not Accessible!");
+        } else {
+            this.gamePanel.endGame(win.get());
+        }
+    }
+
+    @Override
+    public Pair<Double, Double> getScale() {
+        return this.scale;
     }
 }
