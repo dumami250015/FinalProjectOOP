@@ -6,7 +6,7 @@ public final class SunImpl implements Sun {
     private static final String NAME = "Sun";
     private static final int POINTS = 25;
     private static final int SCREEN_BOTTOM = 700;
-    private static final int IMAGE_HEIGHT = 150;
+    private static final int IMAGE_HEIGHT = 100;
     private final int speedYAxis;
     private boolean isAlive;
     private Pair<Integer, Integer> position;
@@ -14,6 +14,7 @@ public final class SunImpl implements Sun {
     public SunImpl(final Pair<Integer, Integer> position, final int speedYAxis) {
         this.position = position;
         this.speedYAxis = speedYAxis;
+        this.isAlive = true;
     }
 
     @Override
