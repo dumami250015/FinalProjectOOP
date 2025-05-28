@@ -1,5 +1,11 @@
 package view.impl;
 
+import model.api.Game;
+import model.impl.GameImpl;
+import model.impl.Peashooter;
+import model.impl.Sunflower;
+import model.impl.Wallnut;
+
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
@@ -21,7 +27,15 @@ public class FieldCellListener implements MouseListener {
         if (this.parent.hasPlant()) {
             return;
         }
-        this.parent.setPlant();
+        if (parent.getActivePlantBrush() == GameImpl.PlantType.Sunflower) {
+            parent.setPlant(new Sunflower(parent.getCoord()));
+        }
+        if (parent.getActivePlantBrush() == GameImpl.PlantType.Peashooter) {
+            parent.setPlant(new Peashooter(parent.getCoord()));
+        }
+        if (parent.getActivePlantBrush() == GameImpl.PlantType.Wallnut) {
+            parent.setPlant(new Wallnut(parent.getCoord()));
+        }
     }
 
     @Override

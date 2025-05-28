@@ -8,6 +8,13 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 public final class GameImpl implements Game {
+    public enum PlantType {
+        None,
+        Sunflower,
+        Peashooter,
+        Wallnut
+    }
+
     private static final int HOUSE_X_POSITION = 150;
 
     //Zombie
@@ -30,6 +37,7 @@ public final class GameImpl implements Game {
     private final FactorySun factorySun;
     private final FactoryZombie factoryZombie;
 
+    private Set<Peashooter> peashooters = new HashSet<>();
     private Set<Plant> plants = new HashSet<>();
     private Set<Zombie> zombies = new HashSet<>();
     private Set<Bullet> bullets = new HashSet<>();
@@ -77,7 +85,6 @@ public final class GameImpl implements Game {
         return false;
     }
 
-    //Movement of entities
     private void moveEntities() {
         for (final var zombie: zombies) {
             if (zombie.isCanGo()) {
@@ -106,7 +113,6 @@ public final class GameImpl implements Game {
         return (currentTime - previousTime) >= delta;
     }
 
-    //Generate sun from the sky
     private void newSunGenerate(final long currentTime) {
         if (hasDeltaTimePassed(timeOfLastCreatedSun, currentTime, deltaTimeSun)) {
             timeOfLastCreatedSun = currentTime;
@@ -116,20 +122,6 @@ public final class GameImpl implements Game {
         }
     }
 
-    //Generate sun from sunflower
-//    private void generateSunflowerSuns(final long currentTime) {
-//        for (Plant plant : plants) {
-//            if (plant instanceof SunflowerImpl) {
-//                SunflowerImpl sunflower = (SunflowerImpl) plant;
-//                Sun newSun = sunflower.generateSun(currentTime);
-//                if (newSun != null) {
-//                    suns.add(newSun);
-//                }
-//            }
-//        }
-//    }
-
-    //Generate zombie
     private void newZombieGenerate(final long elapsed) {
         if (hasDeltaTimePassed(timeOfLastCreatedZombie, elapsed, deltaTimeZombie) && canSingleZombieGenerate ||
             hasDeltaTimePassed(timeOfLastCreatedSun, elapsed, DELTA_TIME_FIRST_ZOMBIE) && gameState.getZombieGenerated() == 0) {
@@ -209,26 +201,25 @@ public final class GameImpl implements Game {
         zombies = zombieTemp;
     }
 
-    //Peashooter shoot
-    private void plantsShoot() {
-        plants.stream().filter(plant -> System.currentTimeMillis() - plant.getLastTimeAttack() > plant.getCoolDown())
-                .forEach(plant -> zombies.stream()
-                        .filter(zombie -> plant.getPosition().getY() == zombie.getPosition().getY() + DELTA_Y_PLANT
-                        || plant.getPosition().getY() == zombie.getPosition().getY() + DELTA_Y_PLANT - 3)
+    private void peashootersShoot() {
+        peashooters.stream().filter(peashooter -> System.currentTimeMillis() - peashooter.getLastTimeAttack() > peashooter.getCoolDown())
+                .forEach(peashooter -> zombies.stream()
+                        .filter(zombie -> peashooter.getPosition().getY() == zombie.getPosition().getY() + DELTA_Y_PLANT
+                        || peashooter.getPosition().getY() == zombie.getPosition().getY() + DELTA_Y_PLANT - 3)
                         .forEach(zombie -> {
                             bullets.add(new BulletImpl(
-                                    new Pair<>(plant.getPosition().getX() + DELTA_X_BULLET, plant.getPosition().getY()),
+                                    new Pair<>(peashooter.getPosition().getX() + DELTA_X_BULLET, peashooter.getPosition().getY()),
                                     BULLET_SPEED,
-                                    plant.getDamage(),
+                                    peashooter.getDamage(),
                                     "Bullet"));
-                            plant.setLastTimeAttack(System.currentTimeMillis());
+                            peashooter.setLastTimeAttack(System.currentTimeMillis());
                         }));
     }
 
     @Override
     public void update(final long elapsed) {
         checkCollision();
-        plantsShoot();
+        peashootersShoot();
         removeKilledSuns();
         moveEntities();
         newSunGenerate(elapsed);
@@ -237,12 +228,13 @@ public final class GameImpl implements Game {
     }
 
     @Override
-    public boolean createPlant(final Pair<Integer, Integer> position) {
-        if (gameState.getSunScore() >= PlantImpl.PLANT_COST) {
-            final PlantImpl newPlant = new PlantImpl(DAMAGE_BASE_PLANT, "Plant", position,
-                    COOLDOWN_BASE_PLANT, HEALTH_BASE_PLANT);
-            plants.add(newPlant);
-            gameState.decreaseSunScore(newPlant.getPlantCost());
+    public boolean createPlant(final Pair<Integer, Integer> position, Plant plant) {
+        if (gameState.getSunScore() >= plant.getPlantCost()) {
+            if (plant instanceof Peashooter) {
+                peashooters.add((Peashooter) plant);
+            }
+            plants.add(plant);
+            gameState.decreaseSunScore(plant.getPlantCost());
             return true;
         }
         return false;
@@ -260,6 +252,7 @@ public final class GameImpl implements Game {
         entities.addAll(zombies);
         entities.addAll(suns);
         entities.addAll(bullets);
+        entities.addAll(peashooters);
         return entities;
     }
 }

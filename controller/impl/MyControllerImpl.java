@@ -73,8 +73,8 @@ public final class MyControllerImpl implements MyController {
     }
 
     @Override
-    public void newPlant(final Pair<Integer, Integer> position) {
-        this.game.createPlant(position);
+    public void newPlant(final Pair<Integer, Integer> position, Plant plant) {
+        this.game.createPlant(position, plant);
     }
 
     @Override
