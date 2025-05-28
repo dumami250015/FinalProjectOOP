@@ -8,4 +8,5 @@ public interface Entities {
     boolean isAlive();
 
     String getEntityName();
+
 }
