@@ -9,7 +9,7 @@ public interface Game {
 
     void update(long elapsed);
 
-    boolean createPlant(Pair<Integer, Integer> position);
+    boolean createPlant(Pair<Integer, Integer> position, Plant plant);
 
     GameState getGameState();
 

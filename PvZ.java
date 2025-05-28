@@ -5,3 +5,11 @@ public final class PvZ {
         new MyControllerImpl();
     }
 }
+
+/*
+BUGS NEEDED TO FIX:
+- Collect suns
+
+FUNCTIONS NEEDED TO ADD:
+- Sunflowers create suns
+*/

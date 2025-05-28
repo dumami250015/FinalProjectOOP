@@ -3,8 +3,6 @@ package model.impl;
 import model.api.Plant;
 
 public class PlantImpl implements Plant {
-    public static final int PLANT_COST = 100;
-
     private final double damage;
     private final String entityName;
     private final Pair<Integer, Integer> position;
@@ -12,14 +10,16 @@ public class PlantImpl implements Plant {
 
     private double remainingHealth;
     private long lastTimeAttack;
+    private int plantCost;
 
     public PlantImpl(final double damage, final String entityName, final Pair<Integer, Integer> position,
-                     final long coolDown, final double remainingHealth) {
+                     final long coolDown, final double remainingHealth, final int plantCost) {
         this.damage = damage;
         this.entityName = entityName;
         this.position = position;
         this.coolDown = coolDown;
         this.remainingHealth = remainingHealth;
+        this.plantCost = plantCost;
     }
 
     @Override
@@ -69,6 +69,8 @@ public class PlantImpl implements Plant {
 
     @Override
     public int getPlantCost() {
-        return PLANT_COST;
+        return plantCost;
     }
+
+    public void setPlantCost(final int plantCost) { this.plantCost = plantCost; }
 }

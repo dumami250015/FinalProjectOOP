@@ -8,7 +8,7 @@ import java.util.Random;
 import java.util.Set;
 
 public final class FactorySun implements FactoryEntities {
-    private static final int SPEED_Y_AXIS = 4;
+    private static final int SPEED_Y_AXIS = 2;
     private static final int STARTING_X_GAME_FIELD = 220;
     private static final int FINAL_X_GAME_FIELD = 750;
     private static final int STARTING_Y_POSITION = -15;

@@ -12,10 +12,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public final class GamePanel extends GenericPanel {
     private static final long serialVersionUID = 1234500002L;
@@ -28,9 +25,13 @@ public final class GamePanel extends GenericPanel {
     private static final int X_MARGIN = 10;
     private static final int Y_MARGIN = 15;
 
-    private static final String PLANT_CARD = "images/plantCard.png";
+    private static final String SUNFLOWER_CARD = "images/sunflowerCard.png";
+    private static final String PEASHOOTER_CARD = "images/peashooterCard.png";
+    private static final String WALLNUT_CARD = "images/wallnutCard.png";
     private static final String SUN_COUNTER_IMAGE = "images/sunCounter.jpg";
-    private static final String PLANT_IMAGE = "images/plantPeaShooter.png";
+    private static final String PEASHOOTER_IMAGE = "images/peashooter.png";
+    private static final String SUNFLOWER_IMAGE = "images/sunflower.png";
+    private static final String WALLNUT_IMAGE = "images/wallnut.png";
     private static final String ZOMBIE_IMAGE = "images/zombieEntity.png";
     private static final String BULLET_IMAGE = "images/ProjectilePea.png";
     private static final String SUN_IMAGE = "images/sunEntity.png";
@@ -40,10 +41,20 @@ public final class GamePanel extends GenericPanel {
     private static final int FIELD_STARTING_X = 220;
     private static final int FIELD_STARTING_Y = 110;
 
-    private static final int CARD_STARTING_X = 50;
-    private static final int CARD_STARTING_Y = 190;
-    private static final int CARD_WIDTH = 112;
-    private static final int CARD_HEIGHT = 70;
+    private static final int CARD_SUNFLOWER_STARTING_X = 50;
+    private static final int CARD_SUNFLOWER_STARTING_Y = 280;
+    private static final int CARD_SUNFLOWER_WIDTH = 69;
+    private static final int CARD_SUNFLOWER_HEIGHT = 95;
+
+    private static final int CARD_PEASHOOTER_STARTING_X = 50;
+    private static final int CARD_PEASHOOTER_STARTING_Y = 190;
+    private static final int CARD_PEASHOOTER_WIDTH = 112;
+    private static final int CARD_PEASHOOTER_HEIGHT = 70;
+
+    private static final int CARD_WALLNUT_STARTING_X = 50;
+    private static final int CARD_WALLNUT_STARTING_Y = 395;
+    private static final int CARD_WALLNUT_WIDTH = 69;
+    private static final int CARD_WALLNUT_HEIGHT = 95;
 
     private static final int SUN_COUNTER_STARTING_X = 50;
     private static final int SUN_COUNTER_STARTING_Y = 50;
@@ -55,8 +66,8 @@ public final class GamePanel extends GenericPanel {
     private static final int POINTS_WIDTH = 60;
     private static final int POINTS_HEIGHT = 40;
 
-    private static final int SUN_ENTITY_WIDTH = 140;
-    private static final int SUN_ENTITY_HEIGHT = 106;
+    private static final int SUN_ENTITY_WIDTH = 55;
+    private static final int SUN_ENTITY_HEIGHT = 55;
 
     private final transient Map<Entities, ImageIcon> entities = new HashMap<>();
 
@@ -90,23 +101,110 @@ public final class GamePanel extends GenericPanel {
             }
         }
 
-        final JButton plantCardButton = new JButton();
-        plantCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(PLANT_CARD)));
-        plantCardButton.setBounds(CARD_STARTING_X, CARD_STARTING_Y, CARD_WIDTH, CARD_HEIGHT);
-        plantCardButton.addActionListener(new ActionListener() {
+//        final JButton plantCardButton = new JButton();
+//        plantCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(PLANT_CARD)));
+//        plantCardButton.setBounds(CARD_STARTING_X, CARD_STARTING_Y, CARD_WIDTH, CARD_HEIGHT);
+//        plantCardButton.addActionListener(new ActionListener() {
+//            @Override
+//            public void actionPerformed(final ActionEvent e) {
+//                if (parent.getController().getSunScore() >= PlantImpl.PLANT_COST) {
+//                    userIsPlanting = !userIsPlanting;
+//                    if (userIsPlanting) {
+//                        showGrid();
+//                    } else {
+//                        hideGrid();
+//                    }
+//                }
+//            }
+//        });
+//        this.add(plantCardButton);
+
+        final JButton peashooterCardButton = new JButton();
+        peashooterCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(PEASHOOTER_CARD)));
+        peashooterCardButton.setBounds(CARD_PEASHOOTER_STARTING_X, CARD_PEASHOOTER_STARTING_Y,
+                CARD_PEASHOOTER_WIDTH, CARD_PEASHOOTER_HEIGHT);
+        peashooterCardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                if (parent.getController().getSunScore() >= PlantImpl.PLANT_COST) {
+                if (parent.getController().getSunScore() >= Peashooter.COST) {
                     userIsPlanting = !userIsPlanting;
                     if (userIsPlanting) {
+                        for (int i = 0; i < ROW_COUNT; i++) {
+                            for (int j = 0; j < COLUMN_COUNT; j++) {
+                                fieldMatrix[i][j].setActivePlantBrush(GameImpl.PlantType.Peashooter);
+                            }
+                        }
                         showGrid();
                     } else {
+                        for (int i = 0; i < ROW_COUNT; i++) {
+                            for (int j = 0; j < COLUMN_COUNT; j++) {
+                                fieldMatrix[i][j].setActivePlantBrush(GameImpl.PlantType.None);
+                            }
+                        }
                         hideGrid();
                     }
                 }
             }
         });
-        this.add(plantCardButton);
+        this.add(peashooterCardButton);
+
+        final JButton sunflowerCardButton = new JButton();
+        sunflowerCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(SUNFLOWER_CARD)));
+        sunflowerCardButton.setBounds(CARD_SUNFLOWER_STARTING_X, CARD_SUNFLOWER_STARTING_Y,
+                CARD_SUNFLOWER_WIDTH, CARD_SUNFLOWER_HEIGHT);
+        sunflowerCardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (parent.getController().getSunScore() >= Sunflower.COST) {
+                    userIsPlanting = !userIsPlanting;
+                    if (userIsPlanting) {
+                        for (int i = 0; i < ROW_COUNT; i++) {
+                            for (int j = 0; j < COLUMN_COUNT; j++) {
+                                fieldMatrix[i][j].setActivePlantBrush(GameImpl.PlantType.Sunflower);
+                            }
+                        }
+                        showGrid();
+                    } else {
+                        for (int i = 0; i < ROW_COUNT; i++) {
+                            for (int j = 0; j < COLUMN_COUNT; j++) {
+                                fieldMatrix[i][j].setActivePlantBrush(GameImpl.PlantType.None);
+                            }
+                        }
+                        hideGrid();
+                    }
+                }
+            }
+        });
+        this.add(sunflowerCardButton);
+
+        final JButton wallnutCardButton = new JButton();
+        wallnutCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(WALLNUT_CARD)));
+        wallnutCardButton.setBounds(CARD_WALLNUT_STARTING_X, CARD_WALLNUT_STARTING_Y,
+                CARD_WALLNUT_WIDTH, CARD_WALLNUT_HEIGHT);
+        wallnutCardButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                if (parent.getController().getSunScore() >= Wallnut.COST) {
+                    userIsPlanting = !userIsPlanting;
+                    if (userIsPlanting) {
+                        for (int i = 0; i < ROW_COUNT; i++) {
+                            for (int j = 0; j < COLUMN_COUNT; j++) {
+                                fieldMatrix[i][j].setActivePlantBrush(GameImpl.PlantType.Wallnut);
+                            }
+                        }
+                        showGrid();
+                    } else {
+                        for (int i = 0; i < ROW_COUNT; i++) {
+                            for (int j = 0; j < COLUMN_COUNT; j++) {
+                                fieldMatrix[i][j].setActivePlantBrush(GameImpl.PlantType.None);
+                            }
+                        }
+                        hideGrid();
+                    }
+                }
+            }
+        });
+        this.add(wallnutCardButton);
 
         this.points = new JLabel("100", SwingConstants.CENTER);
         this.points.setBounds(POINTS_STARTING_X, POINTS_STARTING_Y, POINTS_WIDTH, POINTS_HEIGHT);
@@ -130,19 +228,61 @@ public final class GamePanel extends GenericPanel {
 
                 for (final var el: entities.entrySet()) {
                     if (el.getKey() instanceof Sun
-                            && e.getX() >= el.getKey().getPosition().getX() * scale.getX()
-                            && e.getX() <= (el.getKey().getPosition().getX() + SUN_ENTITY_WIDTH) * scale.getX()
-                            && e.getY() >= el.getKey().getPosition().getY() * scale.getY()
-                            && e.getY() <= (el.getKey().getPosition().getY() + SUN_ENTITY_HEIGHT) * scale.getY()) {
+                            && e.getX() >= el.getKey().getPosition().getX()
+                            && e.getX() <= el.getKey().getPosition().getX() + SUN_ENTITY_WIDTH
+                            && e.getY() >= el.getKey().getPosition().getY()
+                            && e.getY() <= el.getKey().getPosition().getY() + SUN_ENTITY_HEIGHT) {
                         final Sun sun = (Sun) el.getKey();
                         sun.kill();
                         toRemove = el.getKey();
                         parent.getController().increaseSunPoints();
                         points.setText(String.valueOf(parent.getController().getSunScore()));
+                        break;
                     }
                 }
-                entities.remove(toRemove);
+
+                if (toRemove != null) {
+                    entities.remove(toRemove);
+                }
             }
+
+//            @Override
+//            public void mouseClicked(MouseEvent e) {
+//                if (userIsPlanting) {
+//                    return;
+//                }
+//
+//                // 1) Use Iterator so removal is safe
+//                Iterator<Map.Entry<Entities, ImageIcon>> it = entities.entrySet().iterator();
+//
+//                while (it.hasNext()) {
+//                    Map.Entry<Entities, ?> el = it.next();
+//                    Entities key = el.getKey();
+//
+//                    if (key instanceof Sun
+//                            && e.getX() >= key.getPosition().getX() * scale.getX()
+//                            && e.getX() <= (key.getPosition().getX() + SUN_ENTITY_WIDTH) * scale.getX()
+//                            && e.getY() >= key.getPosition().getY() * scale.getY()
+//                            && e.getY() <= (key.getPosition().getY() + SUN_ENTITY_HEIGHT) * scale.getY()) {
+//
+//                        // 2) Update model
+//                        ((Sun) key).kill();
+//                        parent.getController().increaseSunPoints();
+//                        points.setText(
+//                                String.valueOf(parent.getController().getSunScore())
+//                        );
+//
+//                        // 3) Remove safely via iterator
+//                        it.remove();
+//
+//                        // 4) Immediately break if you only expect one sun per click
+//                        break;
+//                    }
+//                }
+//
+//                // 5) Tell Swing to redraw without the collected sun(s)
+//                repaint();
+//            }
 
             @Override
             public void mousePressed(MouseEvent e) {}
@@ -198,7 +338,9 @@ public final class GamePanel extends GenericPanel {
 
     private ImageIcon getEntityImage(final Entities entity) {
         final String resource = switch (entity.getEntityName()) {
-            case "Plant" -> PLANT_IMAGE;
+            case "Peashooter" -> PEASHOOTER_IMAGE;
+            case "Sunflower" -> SUNFLOWER_IMAGE;
+            case "Wallnut" -> WALLNUT_IMAGE;
             case "Zombie" -> ZOMBIE_IMAGE;
             case "Bullet" -> BULLET_IMAGE;
             case "Sun" -> SUN_IMAGE;

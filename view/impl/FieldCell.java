@@ -5,6 +5,7 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 import controller.api.*;
+import model.api.Plant;
 import model.impl.*;
 
 import java.awt.*;
@@ -23,6 +24,16 @@ public class FieldCell extends JButton {
     private final Border hoverBorder = new LineBorder(hoverColor, 3);
 
     private boolean hasPlant;
+
+    private GameImpl.PlantType activePlantBrush;
+
+    public void setActivePlantBrush(GameImpl.PlantType activePlantBrush) {
+        this.activePlantBrush = activePlantBrush;
+    }
+
+    public GameImpl.PlantType getActivePlantBrush() {
+        return activePlantBrush;
+    }
 
     public FieldCell(final GamePanel parent, final Pair<Integer, Integer> coord, final String text,
                      final MyController controller) {
@@ -49,12 +60,12 @@ public class FieldCell extends JButton {
         this.hasPlant = false;
     }
 
-    protected void setPlant() {
+    protected void setPlant(Plant plant) {
         this.hasPlant = true;
         this.setBorderPainted(false);
         this.parent.userPlantingStatus(false);
         this.parent.hideGrid();
-        controller.newPlant(coord);
+        controller.newPlant(coord, plant);
     }
 
     protected void cellHover(final boolean isHovered) {

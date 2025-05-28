@@ -1,6 +1,7 @@
 package controller.api;
 
 import model.api.Entities;
+import model.api.Plant;
 import model.impl.Pair;
 
 import java.util.Optional;
@@ -11,7 +12,7 @@ public interface MyController {
 
     Set<Entities> getEntities();
 
-    void newPlant(Pair<Integer, Integer> position);
+    void newPlant(Pair<Integer, Integer> position, Plant plant);
 
     void increaseSunPoints();
 
