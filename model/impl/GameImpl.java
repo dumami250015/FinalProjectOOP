@@ -77,6 +77,7 @@ public final class GameImpl implements Game {
         return false;
     }
 
+    //Movement of entities
     private void moveEntities() {
         for (final var zombie: zombies) {
             if (zombie.isCanGo()) {
@@ -105,6 +106,7 @@ public final class GameImpl implements Game {
         return (currentTime - previousTime) >= delta;
     }
 
+    //Generate sun from the sky
     private void newSunGenerate(final long currentTime) {
         if (hasDeltaTimePassed(timeOfLastCreatedSun, currentTime, deltaTimeSun)) {
             timeOfLastCreatedSun = currentTime;
@@ -114,6 +116,20 @@ public final class GameImpl implements Game {
         }
     }
 
+    //Generate sun from sunflower
+//    private void generateSunflowerSuns(final long currentTime) {
+//        for (Plant plant : plants) {
+//            if (plant instanceof SunflowerImpl) {
+//                SunflowerImpl sunflower = (SunflowerImpl) plant;
+//                Sun newSun = sunflower.generateSun(currentTime);
+//                if (newSun != null) {
+//                    suns.add(newSun);
+//                }
+//            }
+//        }
+//    }
+
+    //Generate zombie
     private void newZombieGenerate(final long elapsed) {
         if (hasDeltaTimePassed(timeOfLastCreatedZombie, elapsed, deltaTimeZombie) && canSingleZombieGenerate ||
             hasDeltaTimePassed(timeOfLastCreatedSun, elapsed, DELTA_TIME_FIRST_ZOMBIE) && gameState.getZombieGenerated() == 0) {
@@ -193,6 +209,7 @@ public final class GameImpl implements Game {
         zombies = zombieTemp;
     }
 
+    //Peashooter shoot
     private void plantsShoot() {
         plants.stream().filter(plant -> System.currentTimeMillis() - plant.getLastTimeAttack() > plant.getCoolDown())
                 .forEach(plant -> zombies.stream()
