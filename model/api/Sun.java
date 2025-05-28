@@ -6,4 +6,6 @@ public interface Sun extends Entities {
     int getPoints();
 
     void fallDown();
+
+    boolean isCanFall();
 }

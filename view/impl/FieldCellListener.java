@@ -28,7 +28,7 @@ public class FieldCellListener implements MouseListener {
             return;
         }
         if (parent.getActivePlantBrush() == GameImpl.PlantType.Sunflower) {
-            parent.setPlant(new Sunflower(parent.getCoord()));
+            parent.setPlant(new Sunflower(parent.getCoord(), System.currentTimeMillis()));
         }
         if (parent.getActivePlantBrush() == GameImpl.PlantType.Peashooter) {
             parent.setPlant(new Peashooter(parent.getCoord()));

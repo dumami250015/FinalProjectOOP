@@ -37,11 +37,13 @@ public final class GameImpl implements Game {
     private final FactorySun factorySun;
     private final FactoryZombie factoryZombie;
 
+    private Set<Sunflower> sunflowers = new HashSet<>();
     private Set<Peashooter> peashooters = new HashSet<>();
     private Set<Plant> plants = new HashSet<>();
     private Set<Zombie> zombies = new HashSet<>();
     private Set<Bullet> bullets = new HashSet<>();
     private Set<Sun> suns = new HashSet<>();
+    private Set<Sun> sunsProduced = new HashSet<>();
 
     private final long deltaTimeSunDecrement;
     private final long deltaTimeZombieDecrement;
@@ -92,7 +94,9 @@ public final class GameImpl implements Game {
             }
         }
         for (final var sun: suns) {
-            sun.fallDown();
+            if (sun.isCanFall()) {
+                sun.fallDown();
+            }
         }
         for (final var bullet: bullets) {
             bullet.move();
@@ -201,6 +205,17 @@ public final class GameImpl implements Game {
         zombies = zombieTemp;
     }
 
+    private void sunflowerProduceSun() {
+        sunflowers.stream().filter(sunflower -> System.currentTimeMillis() - sunflower.getLastTimeProduceSun() > sunflower.getCoolDown())
+                .forEach(sunflower -> {
+                    SunImpl newSun = (SunImpl) factorySun.createEntity(sunflower.getPosition());
+                    newSun.setCanFall(false);
+                    suns.add(newSun);
+                    sunsProduced.add(newSun);
+                    sunflower.setLastTimeProduceSun(System.currentTimeMillis());
+                });
+    }
+
     private void peashootersShoot() {
         peashooters.stream().filter(peashooter -> System.currentTimeMillis() - peashooter.getLastTimeAttack() > peashooter.getCoolDown())
                 .forEach(peashooter -> zombies.stream()
@@ -218,6 +233,7 @@ public final class GameImpl implements Game {
 
     @Override
     public void update(final long elapsed) {
+        sunflowerProduceSun();
         checkCollision();
         peashootersShoot();
         removeKilledSuns();
@@ -232,6 +248,9 @@ public final class GameImpl implements Game {
         if (gameState.getSunScore() >= plant.getPlantCost()) {
             if (plant instanceof Peashooter) {
                 peashooters.add((Peashooter) plant);
+            }
+            if (plant instanceof Sunflower) {
+                sunflowers.add((Sunflower) plant);
             }
             plants.add(plant);
             gameState.decreaseSunScore(plant.getPlantCost());
@@ -253,6 +272,7 @@ public final class GameImpl implements Game {
         entities.addAll(suns);
         entities.addAll(bullets);
         entities.addAll(peashooters);
+        entities.addAll(sunflowers);
         return entities;
     }
 }

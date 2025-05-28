@@ -29,6 +29,10 @@ public final class FactoryZombie implements FactoryEntities {
                 new Pair<Integer, Integer>(STARTING_X_ZOMBIE, STARTING_Y_ZOMBIE + DELTA_Y_ZOMBIE * random.nextInt(0, POSSIBLE_Y)));
     }
 
+    public Entities createEntity(Pair<Integer, Integer> position) {
+        return new ZombieImpl(DAMAGE, ZOMBIE_SPEED, COOLDOWN, REMAINING_HEALTH, position);
+    }
+
     @Override
     public Set<Entities> createEntities(final int n) {
         Set<Entities> zombieSet = new HashSet<>();

@@ -23,6 +23,11 @@ public final class FactorySun implements FactoryEntities {
     }
 
     @Override
+    public Entities createEntity(Pair<Integer, Integer> position) {
+        return new SunImpl(position, SPEED_Y_AXIS);
+    }
+
+    @Override
     public Set<Entities> createEntities(final int n) {
         final Set<Entities> sunSet = new HashSet<>();
         for (int i = 0; i < n; i++) {

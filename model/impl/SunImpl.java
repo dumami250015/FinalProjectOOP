@@ -9,12 +9,14 @@ public final class SunImpl implements Sun {
     private static final int IMAGE_HEIGHT = 100;
     private final int speedYAxis;
     private boolean isAlive;
+    private boolean canFall;
     private Pair<Integer, Integer> position;
 
     public SunImpl(final Pair<Integer, Integer> position, final int speedYAxis) {
         this.position = position;
         this.speedYAxis = speedYAxis;
         this.isAlive = true;
+        canFall = true;
     }
 
     @Override
@@ -40,6 +42,14 @@ public final class SunImpl implements Sun {
     @Override
     public int getPoints() {
         return !isAlive && position.getY() != SCREEN_BOTTOM ? POINTS : 0;
+    }
+
+    public boolean isCanFall() {
+        return canFall;
+    }
+
+    public void setCanFall(final boolean canFall) {
+        this.canFall = canFall;
     }
 
     @Override
