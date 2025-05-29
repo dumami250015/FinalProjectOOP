@@ -76,7 +76,7 @@ public class FieldCell extends JButton {
         }
     }
 
-    protected boolean hasPlant() {
+    public boolean hasPlant() {
         return this.hasPlant;
     }
 

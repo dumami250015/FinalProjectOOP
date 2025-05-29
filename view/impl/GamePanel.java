@@ -37,6 +37,8 @@ public final class GamePanel extends GenericPanel {
     private static final String SUN_IMAGE = "images/sunEntity.png";
     private static final String WIN_IMAGE = "images/winner.gif";
     private static final String LOSE_IMAGE = "images/loser.gif";
+    private static final String SHOVEL_IMAGE = "images/shovel.png";
+    private static final String SHOVEL_BACKGROUND_IMAGE = "images/shovel2.png";
 
     private static final int FIELD_STARTING_X = 220;
     private static final int FIELD_STARTING_Y = 110;
@@ -69,6 +71,11 @@ public final class GamePanel extends GenericPanel {
     private static final int SUN_ENTITY_WIDTH = 55;
     private static final int SUN_ENTITY_HEIGHT = 55;
 
+    private static final int SHOVEL_STARTING_X = 870;
+    private static final int SHOVEL_STARTING_Y = 600;
+    private static final int SHOVEL_WIDTH = 56;
+    private static final int SHOVEL_HEIGHT = 26;
+
     private final transient Map<Entities, ImageIcon> entities = new HashMap<>();
 
     private final transient Set<Pair<ImageIcon, Pair<Integer, Integer>>> images = new HashSet<>();
@@ -84,6 +91,8 @@ public final class GamePanel extends GenericPanel {
     private final JLabel points;
 
     private boolean userIsPlanting;
+
+    private Shovel shovel;
 
     public GamePanel(final SwingViewImpl parent, final String backgroundSource) {
         super(parent, backgroundSource);
@@ -118,6 +127,15 @@ public final class GamePanel extends GenericPanel {
 //            }
 //        });
 //        this.add(plantCardButton);
+
+        final JButton shovelButton = new JButton();
+        shovelButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(SHOVEL_IMAGE)));
+        shovelButton.setBounds(SHOVEL_STARTING_X, SHOVEL_STARTING_Y, SHOVEL_WIDTH, SHOVEL_HEIGHT);
+        shovelButton.setContentAreaFilled(false);
+        shovelButton.setBorderPainted(false);
+//        shovelButton.setFocusPainted(false);
+        this.add(shovelButton);
+
 
         final JButton peashooterCardButton = new JButton();
         peashooterCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(PEASHOOTER_CARD)));
@@ -240,10 +258,15 @@ public final class GamePanel extends GenericPanel {
                         break;
                     }
                 }
-
                 if (toRemove != null) {
                     entities.remove(toRemove);
                 }
+
+                if (e.getX() >= SHOVEL_STARTING_X && e.getX() <= SHOVEL_STARTING_X + SHOVEL_WIDTH &&
+                    e.getY() >= SHOVEL_STARTING_Y && e.getY() <= SHOVEL_STARTING_Y + SHOVEL_HEIGHT) {
+                    shovel.setSelected(!shovel.isSelected());
+                }
+
             }
 
 //            @Override
