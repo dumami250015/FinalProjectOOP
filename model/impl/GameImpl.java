@@ -1,6 +1,7 @@
 package model.impl;
 
 import model.api.*;
+import view.impl.FieldCell;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -257,6 +258,17 @@ public final class GameImpl implements Game {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void deleteCellPlant(final Plant plant) {
+        if (plant instanceof Peashooter) {
+            peashooters.remove((Peashooter) plant);
+        }
+        if (plant instanceof Sunflower) {
+            sunflowers.remove((Sunflower) plant);
+        }
+        plants.remove(plant);
     }
 
     @Override

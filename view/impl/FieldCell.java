@@ -24,16 +24,9 @@ public class FieldCell extends JButton {
     private final Border hoverBorder = new LineBorder(hoverColor, 3);
 
     private boolean hasPlant;
-
     private GameImpl.PlantType activePlantBrush;
-
-    public void setActivePlantBrush(GameImpl.PlantType activePlantBrush) {
-        this.activePlantBrush = activePlantBrush;
-    }
-
-    public GameImpl.PlantType getActivePlantBrush() {
-        return activePlantBrush;
-    }
+    private Plant plant;
+    private boolean canDeleted;
 
     public FieldCell(final GamePanel parent, final Pair<Integer, Integer> coord, final String text,
                      final MyController controller) {
@@ -50,10 +43,30 @@ public class FieldCell extends JButton {
         this.setFocusPainted(false);
 
         this.freeCell();
-
         this.addMouseListener(new FieldCellListener(this));
-
         this.controller = controller;
+        this.canDeleted = false;
+        this.plant = null;
+    }
+
+    public void setCanDeleted(final boolean canDeleted) {
+        this.canDeleted = canDeleted;
+    }
+
+    public boolean getCanDeleted() {
+        return this.canDeleted;
+    }
+
+    public Plant getPlant() {
+        return plant;
+    }
+
+    public void setActivePlantBrush(GameImpl.PlantType activePlantBrush) {
+        this.activePlantBrush = activePlantBrush;
+    }
+
+    public GameImpl.PlantType getActivePlantBrush() {
+        return activePlantBrush;
     }
 
     private void freeCell() {
@@ -62,10 +75,19 @@ public class FieldCell extends JButton {
 
     protected void setPlant(Plant plant) {
         this.hasPlant = true;
+        this.plant = plant;
         this.setBorderPainted(false);
         this.parent.userPlantingStatus(false);
         this.parent.hideGrid();
         controller.newPlant(coord, plant);
+    }
+
+    protected void removePlant(Plant plant) {
+        this.hasPlant = false;
+        this.plant = null;
+        this.setBorderPainted(false);
+        this.parent.hideGrid();
+        controller.removeCellPlant(plant);
     }
 
     protected void cellHover(final boolean isHovered) {
@@ -76,7 +98,7 @@ public class FieldCell extends JButton {
         }
     }
 
-    protected boolean hasPlant() {
+    public boolean hasPlant() {
         return this.hasPlant;
     }
 

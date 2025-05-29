@@ -37,6 +37,8 @@ public final class GamePanel extends GenericPanel {
     private static final String SUN_IMAGE = "images/sunEntity.png";
     private static final String WIN_IMAGE = "images/winner.gif";
     private static final String LOSE_IMAGE = "images/loser.gif";
+    private static final String SHOVEL_IMAGE = "images/shovel.png";
+    private static final String SHOVEL_BACKGROUND_IMAGE = "images/shovel2.png";
 
     private static final int FIELD_STARTING_X = 220;
     private static final int FIELD_STARTING_Y = 110;
@@ -69,6 +71,11 @@ public final class GamePanel extends GenericPanel {
     private static final int SUN_ENTITY_WIDTH = 55;
     private static final int SUN_ENTITY_HEIGHT = 55;
 
+    private static final int SHOVEL_STARTING_X = 870;
+    private static final int SHOVEL_STARTING_Y = 600;
+    private static final int SHOVEL_WIDTH = 56;
+    private static final int SHOVEL_HEIGHT = 26;
+
     private final transient Map<Entities, ImageIcon> entities = new HashMap<>();
 
     private final transient Set<Pair<ImageIcon, Pair<Integer, Integer>>> images = new HashSet<>();
@@ -85,10 +92,37 @@ public final class GamePanel extends GenericPanel {
 
     private boolean userIsPlanting;
 
+    private Shovel shovel;
+
     public GamePanel(final SwingViewImpl parent, final String backgroundSource) {
         super(parent, backgroundSource);
         this.parent = parent;
         this.scale = this.parent.getScale();
+
+        shovel = new Shovel();
+        shovel.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent e) {
+                shovel.setSelected(!shovel.isSelected());
+                if (shovel.isSelected()) {
+                    for (int i = 0; i < ROW_COUNT; i++) {
+                        for (int j = 0; j < COLUMN_COUNT; j++) {
+                            fieldMatrix[i][j].setCanDeleted(true);
+                        }
+                    }
+                    showGrid();
+                } else {
+                    for (int i = 0; i < ROW_COUNT; i++) {
+                        for (int j = 0; j < COLUMN_COUNT; j++) {
+                            fieldMatrix[i][j].setCanDeleted(false);
+                        }
+                    }
+                    hideGrid();
+                }
+            }
+        });
+        this.add(shovel);
+
         this.fieldMatrix = new FieldCell[ROW_COUNT][COLUMN_COUNT];
         for (int i = 0; i < ROW_COUNT; i++) {
             for (int j = 0; j < COLUMN_COUNT; j++) {
@@ -101,23 +135,39 @@ public final class GamePanel extends GenericPanel {
             }
         }
 
-//        final JButton plantCardButton = new JButton();
-//        plantCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(PLANT_CARD)));
-//        plantCardButton.setBounds(CARD_STARTING_X, CARD_STARTING_Y, CARD_WIDTH, CARD_HEIGHT);
-//        plantCardButton.addActionListener(new ActionListener() {
-//            @Override
-//            public void actionPerformed(final ActionEvent e) {
-//                if (parent.getController().getSunScore() >= PlantImpl.PLANT_COST) {
-//                    userIsPlanting = !userIsPlanting;
-//                    if (userIsPlanting) {
-//                        showGrid();
-//                    } else {
-//                        hideGrid();
-//                    }
-//                }
-//            }
-//        });
-//        this.add(plantCardButton);
+
+        for (int i = 0; i < ROW_COUNT; i++) {
+            for (int j = 0; j < COLUMN_COUNT; j++) {
+                int finalI = i;
+                int finalJ = j;
+                fieldMatrix[i][j].addMouseListener(new MouseListener() {
+                    @Override
+                    public void mouseClicked(final MouseEvent e) {}
+
+                    @Override
+                    public void mousePressed(final MouseEvent e) {}
+
+                    @Override
+                    public void mouseReleased(final MouseEvent e) {
+                        if (!fieldMatrix[finalI][finalJ].hasPlant() && shovel.isSelected()) {
+                            for (int i1 = 0; i1 < ROW_COUNT; i1++) {
+                                for (int j1 = 0; j1 < COLUMN_COUNT; j1++) {
+                                    fieldMatrix[i1][j1].setCanDeleted(false);
+                                }
+                            }
+                            hideGrid();
+                            shovel.setSelected(false);
+                        }
+                    }
+
+                    @Override
+                    public void mouseEntered(final MouseEvent e) {}
+
+                    @Override
+                    public void mouseExited(final MouseEvent e) {}
+                });
+            }
+        }
 
         final JButton peashooterCardButton = new JButton();
         peashooterCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(PEASHOOTER_CARD)));
@@ -240,49 +290,10 @@ public final class GamePanel extends GenericPanel {
                         break;
                     }
                 }
-
                 if (toRemove != null) {
                     entities.remove(toRemove);
                 }
             }
-
-//            @Override
-//            public void mouseClicked(MouseEvent e) {
-//                if (userIsPlanting) {
-//                    return;
-//                }
-//
-//                // 1) Use Iterator so removal is safe
-//                Iterator<Map.Entry<Entities, ImageIcon>> it = entities.entrySet().iterator();
-//
-//                while (it.hasNext()) {
-//                    Map.Entry<Entities, ?> el = it.next();
-//                    Entities key = el.getKey();
-//
-//                    if (key instanceof Sun
-//                            && e.getX() >= key.getPosition().getX() * scale.getX()
-//                            && e.getX() <= (key.getPosition().getX() + SUN_ENTITY_WIDTH) * scale.getX()
-//                            && e.getY() >= key.getPosition().getY() * scale.getY()
-//                            && e.getY() <= (key.getPosition().getY() + SUN_ENTITY_HEIGHT) * scale.getY()) {
-//
-//                        // 2) Update model
-//                        ((Sun) key).kill();
-//                        parent.getController().increaseSunPoints();
-//                        points.setText(
-//                                String.valueOf(parent.getController().getSunScore())
-//                        );
-//
-//                        // 3) Remove safely via iterator
-//                        it.remove();
-//
-//                        // 4) Immediately break if you only expect one sun per click
-//                        break;
-//                    }
-//                }
-//
-//                // 5) Tell Swing to redraw without the collected sun(s)
-//                repaint();
-//            }
 
             @Override
             public void mousePressed(MouseEvent e) {}

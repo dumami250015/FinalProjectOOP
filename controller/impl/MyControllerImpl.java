@@ -36,18 +36,19 @@ public final class MyControllerImpl implements MyController {
     }
 
     private void mainLoop() {
-        if (this.world != null && this.view != null) {
-            this.world.setLevel(this.world.getLevelsManager().getLevel(chosenLevel));
-            this.world.setGame(new GameImpl(this.world));
-            this.game = this.world.getGame();
-            final long startTime = System.currentTimeMillis();
-            while (!this.game.isGameOver()) {
-                final long currentStartTime = System.currentTimeMillis();
-                final long elapsed = currentStartTime - startTime;
-                this.game.update(elapsed);
-                this.view.update();
-                waitForNextFrame(currentStartTime);
-            }
+        if (this.world == null || this.view == null) {
+            return;
+        }
+        this.world.setLevel(this.world.getLevelsManager().getLevel(chosenLevel));
+        this.world.setGame(new GameImpl(this.world));
+        this.game = this.world.getGame();
+        final long startTime = System.currentTimeMillis();
+        while (!this.game.isGameOver()) {
+            final long currentStartTime = System.currentTimeMillis();
+            final long elapsed = currentStartTime - startTime;
+            this.game.update(elapsed);
+            this.view.update();
+            waitForNextFrame(currentStartTime);
         }
 
         this.view.endGame(this.game.getGameState().getWinState());
@@ -75,6 +76,11 @@ public final class MyControllerImpl implements MyController {
     @Override
     public void newPlant(final Pair<Integer, Integer> position, Plant plant) {
         this.game.createPlant(position, plant);
+    }
+
+    @Override
+    public void removeCellPlant(final Plant plant) {
+        this.game.deleteCellPlant(plant);
     }
 
     @Override

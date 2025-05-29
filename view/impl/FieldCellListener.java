@@ -24,17 +24,24 @@ public class FieldCellListener implements MouseListener {
 
     @Override
     public void mouseReleased(final MouseEvent e) {
-        if (this.parent.hasPlant()) {
-            return;
+        if (parent.getCanDeleted()) {
+            if (this.parent.hasPlant()) {
+                parent.removePlant(parent.getPlant());
+            }
         }
-        if (parent.getActivePlantBrush() == GameImpl.PlantType.Sunflower) {
-            parent.setPlant(new Sunflower(parent.getCoord(), System.currentTimeMillis()));
-        }
-        if (parent.getActivePlantBrush() == GameImpl.PlantType.Peashooter) {
-            parent.setPlant(new Peashooter(parent.getCoord()));
-        }
-        if (parent.getActivePlantBrush() == GameImpl.PlantType.Wallnut) {
-            parent.setPlant(new Wallnut(parent.getCoord()));
+        else if (parent.getActivePlantBrush() != GameImpl.PlantType.None) {
+            if (this.parent.hasPlant()) {
+                return;
+            }
+            if (parent.getActivePlantBrush() == GameImpl.PlantType.Sunflower) {
+                parent.setPlant(new Sunflower(parent.getCoord(), System.currentTimeMillis()));
+            }
+            if (parent.getActivePlantBrush() == GameImpl.PlantType.Peashooter) {
+                parent.setPlant(new Peashooter(parent.getCoord()));
+            }
+            if (parent.getActivePlantBrush() == GameImpl.PlantType.Wallnut) {
+                parent.setPlant(new Wallnut(parent.getCoord()));
+            }
         }
     }
 
