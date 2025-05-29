@@ -9,6 +9,7 @@ public final class PvZ {
 /*
 BUGS NEEDED TO FIX:
 - Collect suns
+- Peashooter planting operations
 
 FUNCTIONS NEEDED TO ADD:
 - Shovel animation
