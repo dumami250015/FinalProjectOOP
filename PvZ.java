@@ -9,6 +9,8 @@ public final class PvZ {
 /*
 BUGS NEEDED TO FIX:
 - Collect suns
+- Walnut
+
 
 FUNCTIONS NEEDED TO ADD:
 - Produced suns animation
