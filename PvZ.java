@@ -11,7 +11,7 @@ BUGS NEEDED TO FIX:
 - Collect suns
 
 FUNCTIONS NEEDED TO ADD:
+- Shovel animation
 - Produced suns animation
-- Shovel
 - Lawn mower
 */
