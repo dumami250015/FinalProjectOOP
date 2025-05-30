@@ -8,13 +8,11 @@ public final class PvZ {
 
 /*
 BUGS NEEDED TO FIX:
-- Collect suns
 - Peashooter planting operations
 - Zombie block
-- If zombie.X < lawnmower.X
+- Lawn mower's position
 
 FUNCTIONS NEEDED TO ADD:
 - Shovel animation
 - Produced suns animation
-- Lawn mower
 */

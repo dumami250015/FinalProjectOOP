@@ -4,7 +4,7 @@ import model.api.Entities;
 
 public class LawnMower implements Entities {
     private static final String NAME = "Lawn Mower";
-    private static final int SPEED_X = 4;
+    private static final int SPEED_X = 6;
     private static final int SCREEN_WIDTH = 1000;
     private static final int IMAGE_WIDTH = 82;
     private static final int DAMAGE = 1000;
