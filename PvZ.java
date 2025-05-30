@@ -9,7 +9,6 @@ public final class PvZ {
 /*
 BUGS NEEDED TO FIX:
 - Peashooter planting operations
-- Zombie block
 - Lawn mower's position
 
 FUNCTIONS NEEDED TO ADD:

@@ -8,6 +8,8 @@ import java.util.Random;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static java.lang.Math.abs;
+
 public final class GameImpl implements Game {
     public enum PlantType {
         None,
@@ -194,7 +196,8 @@ public final class GameImpl implements Game {
         zombies.forEach(zombie -> plants.stream()
                 .filter(plant -> (plant.getPosition().getY() == zombie.getPosition().getY() + DELTA_Y_PLANT
                         || plant.getPosition().getY() == zombie.getPosition().getY() + DELTA_Y_PLANT - 3)
-                        && zombie.getPosition().getX() <= plant.getPosition().getX() + DELTA_PLANT)
+                        && zombie.getPosition().getX() - plant.getPosition().getX() - DELTA_PLANT <= 0
+                        && zombie.getPosition().getX() - plant.getPosition().getX() - DELTA_PLANT >= -59)
                 .forEach(plant -> {
                     zombieEatPlant(zombie, plant);
                     zombie.setCanGo(false);
@@ -246,33 +249,21 @@ public final class GameImpl implements Game {
     }
 
     private void lawnMowerActing() {
-//        lawnMowers.forEach(lawnMower -> zombies.stream().filter(zombie -> (lawnMower.isAlive())
-//                        && zombie.getPosition().getX() == lawnMower.getPosition().getX()
-//                        && zombie.getPosition().getY() == lawnMower.getPosition().getY())
-//                .forEach(zombie -> {
-//
-//                })
-        for (LawnMower lawnMower: lawnMowers) {
+        for (LawnMower lawnMower : lawnMowers) {
             if (lawnMower.isRunning()) {
                 lawnMower.run();
             }
         }
 
-        for (LawnMower lawnMower: lawnMowers) {
-            for (Zombie zombie: zombies) {
+        for (LawnMower lawnMower : lawnMowers) {
+            for (Zombie zombie : zombies) {
                 if (!lawnMower.isRunning() && lawnMower.isAlive() && zombie.getPosition().getY() + DELTA_Y_ZOMBIE == lawnMower.getPosition().getY()
-                    && zombie.getPosition().getX() <= lawnMower.getPosition().getX() + lawnMower.getImageWidth()) {
+                        && zombie.getPosition().getX() <= lawnMower.getPosition().getX() + lawnMower.getImageWidth()) {
                     System.out.println("Lawn Mower Running");
                     lawnMower.run();
                 }
             }
         }
-
-//        for (LawnMower lawnMower: lawnMowers) {
-//            if (!lawnMower.isAlive()) {
-//                lawnMowers.remove(lawnMower);
-//            }
-//        }
     }
 
     private void peashootersShoot() {
@@ -328,6 +319,15 @@ public final class GameImpl implements Game {
             sunflowers.remove((Sunflower) plant);
         }
         plants.remove(plant);
+        for (Zombie zombie: zombies) {
+            System.out.println((zombie.getPosition().getX() - plant.getPosition().getX() - DELTA_PLANT) + " " +
+                    (zombie.getPosition().getY() - plant.getPosition().getY() + 64));
+            if (zombie.getPosition().getX() - plant.getPosition().getX() - DELTA_PLANT >= -59 &&
+                zombie.getPosition().getX() - plant.getPosition().getX() - DELTA_PLANT <= 0 &&
+                abs(zombie.getPosition().getY() - plant.getPosition().getY() + 64) <= 4) {
+                zombie.setCanGo(true);
+            }
+        }
     }
 
     @Override
