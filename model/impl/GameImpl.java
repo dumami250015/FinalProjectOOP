@@ -16,11 +16,20 @@ public final class GameImpl implements Game {
         Wallnut
     }
 
+    //FieldCell
+    private static final int FIELD_STARTING_X = 220;
+    private static final int FIELD_STARTING_Y = 110;
+    private static final int X_OFFSET = 70;
+    private static final int Y_OFFSET = 110;
+    private static final int Y_MARGIN = 15;
+
     private static final int HOUSE_X_POSITION = 150;
 
     //Zombie
     private static final int DELTA_ZOMBIE = 10;
     private static final int DELTA_TIME_FIRST_ZOMBIE = 4000;
+    private static final int STARTING_Y_ZOMBIE = 50;
+    private static final int DELTA_Y_ZOMBIE = 110;
 
     //Base plant
     private static final int DAMAGE_BASE_PLANT = 20;
@@ -45,6 +54,7 @@ public final class GameImpl implements Game {
     private Set<Bullet> bullets = new HashSet<>();
     private Set<Sun> suns = new HashSet<>();
     private Set<Sun> sunsProduced = new HashSet<>();
+    private Set<LawnMower> lawnMowers = new HashSet<>();
 
     private final long deltaTimeSunDecrement;
     private final long deltaTimeZombieDecrement;
@@ -70,7 +80,13 @@ public final class GameImpl implements Game {
         deltaTimeSunDecrement = this.world.getLevel().getSunSpawnRateDecrementRange();
         deltaTimeZombieDecrement = this.world.getLevel().getZombieSpawnRateDecrementRange();
 
+
         canSingleZombieGenerate = true;
+        for (int i = 0; i < 5; i++) {
+            final int xCoord = FIELD_STARTING_X - X_OFFSET - 12;
+            final int yCoord = STARTING_Y_ZOMBIE + DELTA_Y_ZOMBIE * (i + 1);
+                    lawnMowers.add(new LawnMower(new Pair<>(xCoord, yCoord)));
+        }
     }
 
     @Override
@@ -201,6 +217,18 @@ public final class GameImpl implements Game {
                     }
                 }));
 
+        lawnMowers.forEach(lawnMower -> zombies.stream()
+                .filter(zombie -> (zombie.getPosition().getX() <= lawnMower.getPosition().getX() + lawnMower.getImageWidth()
+                        && zombie.getPosition().getY() + DELTA_Y_ZOMBIE == lawnMower.getPosition().getY())
+                        && lawnMower.isRunning())
+                .forEach(zombie -> {
+                    zombie.receiveDamage(lawnMower.getDamage());
+                    if (!zombie.isAlive()) {
+                        zombieTemp.remove(zombie);
+                        gameState.increaseZombieKilled();
+                    }
+                }));
+
         bullets = bulletTemp;
         plants = plantTemp;
         zombies = zombieTemp;
@@ -215,6 +243,36 @@ public final class GameImpl implements Game {
                     sunsProduced.add(newSun);
                     sunflower.setLastTimeProduceSun(System.currentTimeMillis());
                 });
+    }
+
+    private void lawnMowerActing() {
+//        lawnMowers.forEach(lawnMower -> zombies.stream().filter(zombie -> (lawnMower.isAlive())
+//                        && zombie.getPosition().getX() == lawnMower.getPosition().getX()
+//                        && zombie.getPosition().getY() == lawnMower.getPosition().getY())
+//                .forEach(zombie -> {
+//
+//                })
+        for (LawnMower lawnMower: lawnMowers) {
+            if (lawnMower.isRunning()) {
+                lawnMower.run();
+            }
+        }
+
+        for (LawnMower lawnMower: lawnMowers) {
+            for (Zombie zombie: zombies) {
+                if (!lawnMower.isRunning() && lawnMower.isAlive() && zombie.getPosition().getY() + DELTA_Y_ZOMBIE == lawnMower.getPosition().getY()
+                    && zombie.getPosition().getX() <= lawnMower.getPosition().getX() + lawnMower.getImageWidth()) {
+                    System.out.println("Lawn Mower Running");
+                    lawnMower.run();
+                }
+            }
+        }
+
+//        for (LawnMower lawnMower: lawnMowers) {
+//            if (!lawnMower.isAlive()) {
+//                lawnMowers.remove(lawnMower);
+//            }
+//        }
     }
 
     private void peashootersShoot() {
@@ -242,6 +300,7 @@ public final class GameImpl implements Game {
         newSunGenerate(elapsed);
         createWave();
         newZombieGenerate(elapsed);
+        lawnMowerActing();
     }
 
     @Override
@@ -285,6 +344,7 @@ public final class GameImpl implements Game {
         entities.addAll(bullets);
         entities.addAll(peashooters);
         entities.addAll(sunflowers);
+        entities.addAll(lawnMowers);
         return entities;
     }
 }

@@ -10,7 +10,8 @@ import java.util.Set;
 public final class FactoryZombie implements FactoryEntities {
     private static final double DAMAGE = 50;
     private static final double REMAINING_HEALTH = 100;
-    private static final int ZOMBIE_SPEED = 2;
+    private static final int ZOMBIE_SPEED = 10;
+//    private static final int ZOMBIE_SPEED = 2;
     private static final long COOLDOWN = 3000;
     private static final int STARTING_X_ZOMBIE = 800;
     private static final int STARTING_Y_ZOMBIE = 50;

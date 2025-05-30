@@ -10,6 +10,8 @@ public final class PvZ {
 BUGS NEEDED TO FIX:
 - Collect suns
 - Peashooter planting operations
+- Zombie block
+- If zombie.X < lawnmower.X
 
 FUNCTIONS NEEDED TO ADD:
 - Shovel animation

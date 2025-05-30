@@ -39,6 +39,7 @@ public final class GamePanel extends GenericPanel {
     private static final String LOSE_IMAGE = "images/loser.gif";
     private static final String SHOVEL_IMAGE = "images/shovel.png";
     private static final String SHOVEL_BACKGROUND_IMAGE = "images/shovel2.png";
+    private static final String LAWNMOWER_IMAGE = "images/lawnmower.png";
 
     private static final int FIELD_STARTING_X = 220;
     private static final int FIELD_STARTING_Y = 110;
@@ -135,6 +136,24 @@ public final class GamePanel extends GenericPanel {
             }
         }
 
+        //Lawn Mower
+//        final URL url = ClassLoader.getSystemResource(LAWNMOWER_IMAGE);
+//        final Icon icon = new ImageIcon(new ImageIcon(url).getImage());
+//        final JLabel label = new JLabel();
+//        label.setBounds(fieldMatrix[0][0].getX() - X_OFFSET - 12, fieldMatrix[0][0].getY(), 82, 70);
+//        label.setIcon(icon);
+//        this.add(label);
+
+//        final URL url = win ? ClassLoader.getSystemResource(WIN_IMAGE) : ClassLoader.getSystemResource(LOSE_IMAGE);
+//        final int scaledX = (int) (SwingViewImpl.APPLICATION_WIDTH * this.parent.getScale().getX());
+//        final int scaledY = (int) (SwingViewImpl.APPLICATION_HEIGHT * this.parent.getScale().getY());
+//        final Icon icon = new ImageIcon(new ImageIcon(url).getImage().getScaledInstance(scaledX, scaledY, Image.SCALE_DEFAULT));
+//        final JLabel label = new JLabel();
+//        label.setBounds(0, 0, scaledX, scaledY);
+//        label.setIcon(icon);
+//
+//        this.add(label);
+//        this.repaint();
 
         for (int i = 0; i < ROW_COUNT; i++) {
             for (int j = 0; j < COLUMN_COUNT; j++) {
@@ -355,6 +374,7 @@ public final class GamePanel extends GenericPanel {
             case "Zombie" -> ZOMBIE_IMAGE;
             case "Bullet" -> BULLET_IMAGE;
             case "Sun" -> SUN_IMAGE;
+            case "Lawn Mower" -> LAWNMOWER_IMAGE;
             default -> throw new IllegalArgumentException("Unexpected value: " + entity.getClass().getName());
         };
 
