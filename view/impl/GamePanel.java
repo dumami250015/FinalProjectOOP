@@ -192,6 +192,7 @@ public final class GamePanel extends GenericPanel {
         peashooterCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(PEASHOOTER_CARD)));
         peashooterCardButton.setBounds(CARD_PEASHOOTER_STARTING_X, CARD_PEASHOOTER_STARTING_Y,
                 CARD_PEASHOOTER_WIDTH, CARD_PEASHOOTER_HEIGHT);
+        peashooterCardButton.setBorderPainted(false);
         peashooterCardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -221,6 +222,7 @@ public final class GamePanel extends GenericPanel {
         sunflowerCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(SUNFLOWER_CARD)));
         sunflowerCardButton.setBounds(CARD_SUNFLOWER_STARTING_X, CARD_SUNFLOWER_STARTING_Y,
                 CARD_SUNFLOWER_WIDTH, CARD_SUNFLOWER_HEIGHT);
+        sunflowerCardButton.setBorderPainted(false);
         sunflowerCardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
@@ -250,6 +252,7 @@ public final class GamePanel extends GenericPanel {
         wallnutCardButton.setIcon(new ImageIcon(ClassLoader.getSystemResource(WALLNUT_CARD)));
         wallnutCardButton.setBounds(CARD_WALLNUT_STARTING_X, CARD_WALLNUT_STARTING_Y,
                 CARD_WALLNUT_WIDTH, CARD_WALLNUT_HEIGHT);
+        wallnutCardButton.setBorderPainted(false);
         wallnutCardButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
