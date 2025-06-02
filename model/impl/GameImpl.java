@@ -88,7 +88,6 @@ public final class GameImpl implements Game {
             final int xCoord = FIELD_STARTING_X - X_OFFSET - 12;
             final int yCoord = STARTING_Y_ZOMBIE + DELTA_Y_ZOMBIE * (i + 1) - (5 - i) * Y_MARGIN / 4;
             lawnMowers.add(new LawnMower(new Pair<>(xCoord, yCoord)));
-            System.out.println("LawnMower: " + xCoord + " " + yCoord);
         }
     }
 
@@ -152,7 +151,6 @@ public final class GameImpl implements Game {
             timeOfLastCreatedZombie = elapsed;
             ZombieImpl newZombie = (ZombieImpl) factoryZombie.createEntity();
             zombies.add(newZombie);
-            System.out.println("Zombie " + newZombie.getPosition().getX() + " " + newZombie.getPosition().getY());
             final long deltaDecrement = random.nextLong(2 * deltaTimeZombieDecrement) - deltaTimeZombieDecrement;
             deltaTimeZombie -= deltaDecrement;
             gameState.increaseZombieGenerated();
@@ -264,7 +262,6 @@ public final class GameImpl implements Game {
                         && zombie.getPosition().getY() + DELTA_Y_ZOMBIE - lawnMower.getPosition().getY() >= 3
                         && zombie.getPosition().getY() + DELTA_Y_ZOMBIE - lawnMower.getPosition().getY() <= 18
                         && zombie.getPosition().getX() <= lawnMower.getPosition().getX() + lawnMower.getImageWidth()) {
-                    System.out.println("Lawn Mower Running");
                     lawnMower.run();
                 }
             }
@@ -325,8 +322,6 @@ public final class GameImpl implements Game {
         }
         plants.remove(plant);
         for (Zombie zombie: zombies) {
-//            System.out.println((zombie.getPosition().getX() - plant.getPosition().getX() - DELTA_PLANT) + " " +
-//                    (zombie.getPosition().getY() - plant.getPosition().getY() + 64));
             if (zombie.getPosition().getX() - plant.getPosition().getX() - DELTA_PLANT >= -59 &&
                 zombie.getPosition().getX() - plant.getPosition().getX() - DELTA_PLANT <= 0 &&
                 abs(zombie.getPosition().getY() - plant.getPosition().getY() + 64) <= 4) {

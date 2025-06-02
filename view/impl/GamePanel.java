@@ -7,10 +7,7 @@ import model.api.*;
 import model.impl.*;
 
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
+import java.awt.event.*;
 import java.net.URL;
 import java.util.*;
 
@@ -124,6 +121,20 @@ public final class GamePanel extends GenericPanel {
         });
         this.add(shovel);
 
+        this.addMouseMotionListener(new MouseMotionAdapter() {
+            @Override
+            public void mouseMoved(MouseEvent e) {
+                if (shovel.isSelected()) {
+//                    System.out.println(e.getX() + ", " + e.getY());
+                    shovel.getImage().setLocation(e.getX(), e.getY());
+                    add(shovel.getImage());
+                } else {
+                    remove(shovel.getImage());
+                }
+            }
+        });
+
+
         this.fieldMatrix = new FieldCell[ROW_COUNT][COLUMN_COUNT];
         for (int i = 0; i < ROW_COUNT; i++) {
             for (int j = 0; j < COLUMN_COUNT; j++) {
@@ -135,25 +146,6 @@ public final class GamePanel extends GenericPanel {
                         FieldCell.CELL_TEXT_INITIALIZER, parent.getController());
             }
         }
-
-        //Lawn Mower
-//        final URL url = ClassLoader.getSystemResource(LAWNMOWER_IMAGE);
-//        final Icon icon = new ImageIcon(new ImageIcon(url).getImage());
-//        final JLabel label = new JLabel();
-//        label.setBounds(fieldMatrix[0][0].getX() - X_OFFSET - 12, fieldMatrix[0][0].getY(), 82, 70);
-//        label.setIcon(icon);
-//        this.add(label);
-
-//        final URL url = win ? ClassLoader.getSystemResource(WIN_IMAGE) : ClassLoader.getSystemResource(LOSE_IMAGE);
-//        final int scaledX = (int) (SwingViewImpl.APPLICATION_WIDTH * this.parent.getScale().getX());
-//        final int scaledY = (int) (SwingViewImpl.APPLICATION_HEIGHT * this.parent.getScale().getY());
-//        final Icon icon = new ImageIcon(new ImageIcon(url).getImage().getScaledInstance(scaledX, scaledY, Image.SCALE_DEFAULT));
-//        final JLabel label = new JLabel();
-//        label.setBounds(0, 0, scaledX, scaledY);
-//        label.setIcon(icon);
-//
-//        this.add(label);
-//        this.repaint();
 
         for (int i = 0; i < ROW_COUNT; i++) {
             for (int j = 0; j < COLUMN_COUNT; j++) {

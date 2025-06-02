@@ -3,10 +3,11 @@ package model.impl;
 import view.impl.FieldCell;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-public class Shovel extends JButton {
+public class Shovel extends JButton{
     private static final String SHOVEL_IMAGE = "images/shovel.png";
     private static final String SHOVEL_BACKGROUND_IMAGE = "images/shovel2.png";
     private static final int SHOVEL_STARTING_X = 870;
@@ -14,6 +15,8 @@ public class Shovel extends JButton {
     private static final int SHOVEL_WIDTH = 56;
     private static final int SHOVEL_HEIGHT = 26;
     private boolean isSelected;
+    private ImageIcon image;
+    JLabel label;
 
     public Shovel () {
         setIcon(new ImageIcon(ClassLoader.getSystemResource(SHOVEL_IMAGE)));
@@ -22,8 +25,16 @@ public class Shovel extends JButton {
         setBorderPainted(false);
 //        .setFocusPainted(false);
         isSelected = false;
+
+        this.image = new ImageIcon(ClassLoader.getSystemResource(SHOVEL_IMAGE));
+        this.label = new JLabel(image);
+        this.label.setSize(image.getIconWidth(), image.getIconHeight());
+        this.label.setVisible(true);
     }
 
+    public JLabel getImage() {
+        return label;
+    }
 
     public boolean isSelected() {
         return isSelected;
